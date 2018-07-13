@@ -37,11 +37,11 @@ QuantCI = function(cfd, n, probs = seq(0.05,0.95,0.01), Np = NA, alpha = 0.05){
   # estimate percentiles
   phi = log2(cfd[[1]])
   X = cfd[[2]]
-  estimate = 2^approx(x = X, y = phi, xout = probs)[[2]]
+  estimate = 2^approx(x = X, y = phi, xout = probs, rule = 2)[[2]]
   p.upper = (n*probs + tcrit*sigma)/n
-  upper = 2^approx(x = X, y = phi, xout = p.upper)[[2]]
+  upper = 2^approx(x = X, y = phi, xout = p.upper, rule = 2)[[2]]
   p.lower = (n*probs - tcrit*sigma)/n
-  lower = 2^approx(x = X, y = phi, xout = p.lower)[[2]]
+  lower = 2^approx(x = X, y = phi, xout = p.lower, rule = 2)[[2]]
 
   results = data.frame(probs, estimate, lower, upper)
 
@@ -135,11 +135,11 @@ PolyCI = function(cfd, n, probs = seq(0.05, 0.95, 0.01), Np= NA, alpha = 0.05, p
   # estimate percentiles
   phi = log2(cfd[[1]])
   X = cfd[[2]]
-  estimate = 2^approx(x = X, y = phi, xout = probs)[[2]]
+  estimate = 2^approx(x = X, y = phi, xout = probs, rule = 2)[[2]]
   p.upper = (n*probs + tcrit*sigma)/n
-  upper = 2^approx(x = X, y = phi, xout = p.upper)[[2]]
+  upper = 2^approx(x = X, y = phi, xout = p.upper, rule = 2)[[2]]
   p.lower = (n*probs - tcrit*sigma)/n
-  lower = 2^approx(x = X, y = phi, xout = p.lower)[[2]]
+  lower = 2^approx(x = X, y = phi, xout = p.lower, rule = 2)[[2]]
 
   x.poly = c(upper, rev(lower))
   y.poly = c(probs, rev(probs))
