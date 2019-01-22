@@ -4,8 +4,8 @@
 \alias{PolyCI}
 \title{Generate a polygon representing the confidence bounds for a grain size distribution}
 \usage{
-PolyCI(cfd, n, probs = seq(0.05, 0.95, 0.01), Np = NA, alpha = 0.05,
-  plot = FALSE)
+PolyCI(cfd, n, probs = seq(0.01, 0.99, 0.01), equaltail = T, Np = NA,
+  alpha = 0.05, plot = FALSE)
 }
 \arguments{
 \item{cfd}{data frame providing a list grain sizes in the first variable
@@ -17,6 +17,11 @@ frequency distribution in \code{cfd} is based}
 
 \item{probs}{numeric vector of probabilities defining the polygon vertices,
 with values in [0,1].}
+
+\item{equaltail}{is a logical variable that determines whether the calculations
+of the confidence interval are based on an approximation with equal areas in
+each tail (the default), or based on the exact binomial solution with a coverage
+of at least 95%}
 
 \item{Np}{if the cumulative frequency data was a sub-sample from a finite
 population of size Np, then the confidence range will be smaller and a

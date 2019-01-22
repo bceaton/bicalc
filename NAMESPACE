@@ -2,4 +2,5 @@
 
 export(MakeCFD)
 export(PolyCI)
-export(QuantCI)
+export(QuantBD)
+export(WolmanCI)
