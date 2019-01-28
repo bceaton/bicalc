@@ -14,5 +14,13 @@ QuantBD(n, p, alpha = 0.05)
 \item{alpha}{the confidence level (default value is 0.05)}
 }
 \description{
-Calculate the confidence interval for a quantile 'p'
+\code{QuantBD} uses the  binomial distribution to compute a 
+near-symmetric distribution-free confidence interval for a quantile 'p'.
+Returns indices for the order statistics, along with coverage probability.
+    
+The function returns the indices representing a a confidence interval 
+that contains the population quantile of interest, assuming a given
+confidence level. The script also returns the probability coverage 
+for the confidence interval. Finally, the function returns an approximation
+of the confidence interval that has equal areas in the tails of the distribution
 }

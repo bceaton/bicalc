@@ -53,14 +53,6 @@ MakeCFD = function(obs, increment = 0.5, count = FALSE, plot = FALSE){
 #' \code{QuantBD} uses the  binomial distribution to compute a 
 #' near-symmetric distribution-free confidence interval for a quantile 'p'.
 #' Returns indices for the order statistics, along with coverage probability.
-#' This script was adapted by R.D. Moore from one found at
-#'   @MISC {284970,
-#'     TITLE = {How to obtain a confidence interval for a percentile?},
-#'    AUTHOR = {whuber (https://stats.stackexchange.com/users/919/whuber)},
-#'     HOWPUBLISHED = {Cross Validated},
-#'     NOTE = {URL:https://stats.stackexchange.com/q/284970 (version: 2017-06-12)},
-#'     EPRINT = {https://stats.stackexchange.com/q/284970},
-#'     URL = {https://stats.stackexchange.com/q/284970}
 #'     
 #'The function returns the indices representing a a confidence interval 
 #'that contains the population quantile of interest, assuming a given
@@ -135,13 +127,10 @@ QuantBD <- function(n, p, alpha = 0.05) {
 #' of the confidence interval are based on an approximation with equal areas in
 #' each tail (the default), or based on the exact binomial solution with a coverage
 #' of at least 95%
-#' @param Np if the cumulative frequency data was a sub-sample from a finite
-#' population of size Np, then the confidence range will be smaller and a
-#' finite population correction is applied.
 #' @param alpha  the desired confidence level for which to calculate a
 #' confidence interval in [0,1].
 #' @export
-WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  Np = NA, alpha = 0.05){
+WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  alpha = 0.05){
   # use the binomial approach
   p.upper = vector(mode="numeric", length = length(probs))
   p.lower = vector(mode="numeric", length = length(probs))
@@ -193,31 +182,12 @@ WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  Np =
 #' of the confidence interval are based on an approximation with equal areas in
 #' each tail (the default), or based on the exact binomial solution with a coverage
 #' of at least 95%
-#' @param Np if the cumulative frequency data was a sub-sample from a finite
-#' population of size Np, then the confidence range will be smaller and a
-#' finite population correction is applied.
 #' @param alpha  the desired confidence level for which to calculate a
 #' confidence interval in [0,1].
 #' @param plot optional flag to produce a graph of the resulting grain size
 #' distribution
 #' @export
-PolyCI = function(cfd, n, probs = seq(0.01, .99, 0.01), equaltail = T, Np= NA, alpha = 0.05, plot = FALSE){
-  # tcrit = qt(1 - alpha/2, n)  #calculate t statistic
-  # #  calculate binomial standard deviation
-  # if (is.na(Np)){
-  #   sigma = sqrt(n*probs*(1-probs))
-  # }else if(!is.na(Np)){
-  #   fpc = sqrt ((Np - n) / (Np - 1))
-  #   sigma = sqrt(n*probs*(1-probs))*fpc
-  # }
-  # # estimate percentiles
-  # phi = log2(cfd[[1]])
-  # X = cfd[[2]]
-  # estimate = 2^approx(x = X, y = phi, xout = probs, rule = 2)[[2]]
-  # p.upper = (n*probs + tcrit*sigma)/n
-  # upper = 2^approx(x = X, y = phi, xout = p.upper, rule = 2)[[2]]
-  # p.lower = (n*probs - tcrit*sigma)/n
-  # lower = 2^approx(x = X, y = phi, xout = p.lower, rule = 2)[[2]]
+PolyCI = function(cfd, n, probs = seq(0.01, .99, 0.01), equaltail = T, alpha = 0.05, plot = FALSE){
   
   # use the binomial approach
   p.upper = vector(mode="numeric", length = length(probs))

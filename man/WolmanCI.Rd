@@ -5,7 +5,7 @@
 \title{Calculate the percentiles and confidence intervals}
 \usage{
 WolmanCI(cfd, n, probs = seq(0.05, 0.95, 0.05), equaltail = T,
-  Np = NA, alpha = 0.05)
+  alpha = 0.05)
 }
 \arguments{
 \item{cfd}{data frame providing a list grain sizes in the first variable
@@ -21,10 +21,6 @@ frequency distribution in \code{cfd} is based}
 of the confidence interval are based on an approximation with equal areas in
 each tail (the default), or based on the exact binomial solution with a coverage
 of at least 95%}
-
-\item{Np}{if the cumulative frequency data was a sub-sample from a finite
-population of size Np, then the confidence range will be smaller and a
-finite population correction is applied.}
 
 \item{alpha}{the desired confidence level for which to calculate a
 confidence interval in [0,1].}

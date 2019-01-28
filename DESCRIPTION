@@ -1,10 +1,12 @@
 Package: bicalc
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: Estimating confidence intervals for cumulative frequency distributions
+Version: 1.0.0.000
+Authors@R: person("Brett", "Eaton", email = "brett.eatont@ubc.ca", role = c("aut", "cre"))
+Description: This package uses binomial theory to estimate confidence intervals for the percentiles of gravel bed river bed surfaces. To use this technique, the user must have a cumulative frequency of the bed surface, and they must know how many individual measurements were taken in order to create the frequency distribution. The package also contains tools that can be used to create cumulative frequency distributions using measurements of individual grain sizes. 
 Depends: R (>= 3.4.4)
-License: What license is it under?
+License: This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 (GPL-3). This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 Encoding: UTF-8
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 6.1.0
