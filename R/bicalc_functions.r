@@ -20,6 +20,7 @@
 #' @param plot optional flag to produce a graph of the resulting grain size
 #' distribution
 #' @export
+
 MakeCFD = function(obs, increment = 0.5, count = FALSE, plot = FALSE){
   n = length(obs)
   max.phi = ceiling(log2(max(obs)))
@@ -30,12 +31,12 @@ MakeCFD = function(obs, increment = 0.5, count = FALSE, plot = FALSE){
                  plot = FALSE)
   cfd = data.frame(size)
   cfd$probs = c(0, cumsum(results$counts))/sum(results$counts)
-  
+
   if(count == TRUE){
     cfd$counts = c(0,results$counts)
     cfd = (cfd[which(!cfd$counts == 0),])
   }
-  
+
   if(plot == TRUE){
     plot(cfd[[1]], cfd[[2]],
          type = "b",
@@ -44,60 +45,48 @@ MakeCFD = function(obs, increment = 0.5, count = FALSE, plot = FALSE){
          xlab = "grain size (mm)",
          ylab = "cum. prop. finer")
   }
-  
+
   return(cfd)
 }
 
-#' Calculate the confidence interval for a quantile 'p' 
-#' 
-#' \code{QuantBD} uses the  binomial distribution to compute a 
+#' Calculate the confidence interval for a quantile 'p'
+#'
+#' \code{QuantBD} uses the  binomial distribution to compute a
 #' near-symmetric distribution-free confidence interval for a quantile 'p'.
 #' Returns indices for the order statistics, along with coverage probability.
-#'     
-#'The function returns the indices representing a a confidence interval 
+#'
+#'The function returns the indices representing a a confidence interval
 #'that contains the population quantile of interest, assuming a given
-#'confidence level. The script also returns the probability coverage 
+#'confidence level. The script also returns the probability coverage
 #'for the confidence interval. Finally, the function returns an approximation
 #'of the confidence interval that has equal areas in the tails of the distribution
 #'
-#'@param n the sample size 
+#'@param n the sample size
 #'@param p the desired quantile to be estimated from the sample
 #'@param alpha the confidence level (default value is 0.05)
 #'@export
-#'
 
 QuantBD <- function(n, p, alpha = 0.05) {
-  #
-  # Search over a small range of upper and lower order statistics for the 
-  # closest coverage to 1 - alpha (but not less than it, if possible).
-  #   n = sample size
-  #   p = desired quantile
-  # 
   u <- qbinom(1 - alpha/2, n, p) + (-2:2) + 1
   l <- qbinom(alpha/2, n, p) + (-2:2)
   u[u > n] <- Inf
   l[l < 0] <- -Inf
   p_c <- outer(l, u, function(a, b) pbinom(b-1, n, p) - pbinom(a-1, n, p))
   if (max(p_c) < 1 - alpha) {
-    i <- which(p_c == max(p_c)) 
+    i <- which(p_c == max(p_c))
   } else {
     i <- which(p_c == min(p_c[p_c >= 1 - alpha]))
   }
   i <- i[1]
-  #
-  # return the order statistics and the actual coverage
-  #
+
   u <- rep(u, each = 5)[i]
   l <- rep(l, 5)[i]
-  
-  # now estimate a CI with equal tails
-  # find cumulative probability and set alpha
+
   k = 1:n
-  pcum = pbinom(k, n , p) 
-  
-  # use approx function to interpolate the "k" values associated with the limits
+  pcum = pbinom(k, n , p)
+
   lu_approx = approx(x = pcum, y = k, xout = c(alpha/2, 1 - alpha/2))$y
-  
+
   list(interval = c(l, u), coverage = p_c[i], equaltail = lu_approx)
 }
 
@@ -107,7 +96,7 @@ QuantBD <- function(n, p, alpha = 0.05) {
 #' \code{WolmanCI} is a function that uses cumulative frequency distribution
 #' data for Wolman or grid-by-number samples of bed surface texture to
 #' estimate the value of user-specified percentiles. The function also uses
-#' the normal approximation to estimate the confidence intervals corresponding 
+#' the normal approximation to estimate the confidence intervals corresponding
 #' to a user-specified confidence level, based on the number of grain size
 #' measurements that were used to construct the cumulative frequency
 #' distribution.
@@ -130,6 +119,7 @@ QuantBD <- function(n, p, alpha = 0.05) {
 #' @param alpha  the desired confidence level for which to calculate a
 #' confidence interval in [0,1].
 #' @export
+
 WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  alpha = 0.05){
   # use the binomial approach
   p.upper = vector(mode="numeric", length = length(probs))
@@ -147,7 +137,7 @@ WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  alph
       p.lower[i] = tmp$interval[1]/n
     }
   }
-    
+
   # estimate percentiles
   phi = log2(cfd[[1]])
   X = cfd[[2]]
@@ -158,9 +148,6 @@ WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  alph
 
   return(results)
 }
-
-
-
 
 #' Generate a polygon representing the confidence bounds for a grain size distribution
 #'
@@ -187,8 +174,9 @@ WolmanCI = function(cfd, n,  probs = seq(0.05, 0.95, 0.05), equaltail = T,  alph
 #' @param plot optional flag to produce a graph of the resulting grain size
 #' distribution
 #' @export
+
 PolyCI = function(cfd, n, probs = seq(0.01, .99, 0.01), equaltail = T, alpha = 0.05, plot = FALSE){
-  
+
   # use the binomial approach
   p.upper = vector(mode="numeric", length = length(probs))
   p.lower = vector(mode="numeric", length = length(probs))
@@ -206,13 +194,14 @@ PolyCI = function(cfd, n, probs = seq(0.01, .99, 0.01), equaltail = T, alpha = 0
       p.lower[i] = tmp$interval[1]/n
     }
   }
+
   # estimate percentiles
   phi = log2(cfd[[1]])
   X = cfd[[2]]
   estimate = 2^approx(x = X, y = phi, xout = probs, rule = 2)[[2]]
   upper = 2^approx(x = X, y = phi, xout = p.upper, rule = 2)[[2]]
   lower = 2^approx(x = X, y = phi, xout = p.lower, rule = 2)[[2]]
-  
+
   x.poly = c(upper, rev(lower))
   y.poly = c(probs, rev(probs))
   poly.out = data.frame(x.poly, y.poly)
